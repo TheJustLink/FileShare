@@ -15,4 +15,7 @@ jobs:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEY }}
-        script: whoami
+        script: |
+          git clone ${{ github.repositoryUrl }}
+          cd ${{ github.event.repository.name }}
+          docker compose up -d --build -e MINIO_USER=${{ secrets.MINIO_USER }} -e MINIO_PASSWORD=${{ secrets.MINIO_PASSWORD }}
