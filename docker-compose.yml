@@ -33,5 +33,7 @@ services:
       - 443:80
 
     environment:
+      - MINIO_ROOT_USER
+      - MINIO_ROOT_PASSWORD
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:80
