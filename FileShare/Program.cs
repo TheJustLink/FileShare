@@ -1,5 +1,7 @@
 using System;
 
+using ConfigurationSubstitution;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,6 +30,8 @@ public class Program
                 Version = "v1"
             });
         });
+
+        builder.Configuration.EnableSubstitutions("${", "}");
 
         var app = builder.Build();
 

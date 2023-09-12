@@ -1,10 +1,22 @@
 {
   "profiles": {
-    "Docker Compose": {
+    "Run": {
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
       "serviceActions": {
-        "app": "StartDebugging"
+        "app": "StartWithoutDebugging",
+        "database": "StartWithoutDebugging"
+      }
+    },
+    "Debug": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "composeLaunchAction": "LaunchBrowser",
+      "composeLaunchServiceName": "app",
+      "composeLaunchUrl": "{Scheme}://localhost:{ServicePort}",
+      "serviceActions": {
+        "app": "StartDebugging",
+        "database": "StartWithoutDebugging"
       }
     }
   }

@@ -6,7 +6,7 @@ volumes:
 services:
   database:
     image: quay.io/minio/minio
-    #restart: always
+    restart: always
     volumes:
       - minio-data:/data
     command: server /data --console-address ":9090"
@@ -14,8 +14,8 @@ services:
       - 9000:9000
       - 9090:9090
     environment:
-      - MINIO_ROOT_USER=root
-      - MINIO_ROOT_PASSWORD=toorroot
+      - MINIO_ROOT_USER=${MINIO_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_PASSWORD}
     healthcheck:
         test: ["CMD", "curl", "-f", "http://database:9000/minio/health/live"]
         interval: 30s
@@ -25,14 +25,12 @@ services:
   app:
     build:
       context: ./FileShare
-    #restart: always
+    restart: always
     depends_on:
       - database
     ports:
       - 80:80
-      - 443:443
 
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_URLS=https://+:443;http://+:80
-      - ASPNETCORE_HTTPS_PORT=443
+      - ASPNETCORE_URLS=http://+:80
