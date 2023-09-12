@@ -18,4 +18,5 @@ jobs:
         script: |
           cd ${{ github.event.repository.name }}
           git pull
+          docker compose down
           MINIO_ROOT_USER=${{ secrets.MINIO_USER }} MINIO_ROOT_PASSWORD=${{ secrets.MINIO_PASSWORD }} docker compose up -d --build
