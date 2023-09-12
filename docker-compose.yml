@@ -30,6 +30,7 @@ services:
       - database
     ports:
       - 80:80
+      - 443:80
 
     environment:
       - ASPNETCORE_ENVIRONMENT=Production

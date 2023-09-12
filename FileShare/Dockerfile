@@ -23,5 +23,4 @@ COPY --from=publish /app/publish .
 
 # Entrypoint
 EXPOSE 80
-EXPOSE 443
 ENTRYPOINT ["dotnet", "FileShare.dll"]
