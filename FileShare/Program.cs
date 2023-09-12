@@ -17,6 +17,8 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        builder.Configuration.EnableSubstitutions("${", "}");
+
         builder.Services.AddControllersWithViews();
 
         var connectionString = builder.Configuration.GetConnectionString("Minio");
@@ -31,11 +33,8 @@ public class Program
             });
         });
 
-        builder.Configuration.EnableSubstitutions("${", "}");
-
         var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
