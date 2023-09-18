@@ -30,12 +30,6 @@ public class HomeController : Controller
         return View();
     }
 
-    [HttpGet]
-    public IActionResult Privacy()
-    {
-        return View();
-    }
-
     [HttpGet("{bucket}")]
     public async Task<IActionResult> List(string bucket)
     {
