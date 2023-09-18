@@ -44,7 +44,7 @@ public class Program
         }
         else
         {
-            app.UseExceptionHandler("/Home/Error");
+            app.UseDeveloperExceptionPage();
             app.UseHsts();
         }
 
