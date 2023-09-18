@@ -19,9 +19,5 @@ jobs:
           cd ${{ github.event.repository.name }}
           git pull
           docker compose down
-          APP_PORT=${{ secrets.APP_PORT }}
-          MINIO_ROOT_USER=${{ secrets.MINIO_USER }}
-          MINIO_ROOT_PASSWORD=${{ secrets.MINIO_PASSWORD }}
-          MINIO_CONSOLE_PORT=${{ secrets.MINIO_CONSOLE_PORT }}
-          docker compose up -d --build
+          APP_PORT=${{ secrets.APP_PORT }} MINIO_ROOT_USER=${{ secrets.MINIO_USER }} MINIO_ROOT_PASSWORD=${{ secrets.MINIO_PASSWORD }} MINIO_CONSOLE_PORT=${{ secrets.MINIO_CONSOLE_PORT }} docker compose up -d --build
           docker builder prune
