@@ -24,3 +24,4 @@ jobs:
           MINIO_ROOT_PASSWORD=${{ secrets.MINIO_PASSWORD }}
           MINIO_CONSOLE_PORT=${{ secrets.MINIO_CONSOLE_PORT }}
           docker compose up -d --build
+          docker builder prune
