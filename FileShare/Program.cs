@@ -44,7 +44,6 @@ static class Program
         }
         else
         {
-            app.UseDeveloperExceptionPage();
             app.UseHsts();
         }
 
