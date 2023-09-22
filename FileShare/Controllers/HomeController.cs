@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 
@@ -39,16 +41,34 @@ public class HomeController : Controller
     public async Task<IActionResult> Upload(IFormFile? file)
     {
         if (file == null)
-            return BadRequest("No file to upload!");
+            return BadRequest("No file to upload");
 
         await using var fileStream = file.OpenReadStream();
 
         await EnsureBucketExists(FilesBucketName);
-        var uploadedFile = await UploadObject(FilesBucketName, file.FileName, fileStream, file.ContentType, file.Length);
+        var id = await UploadObject(FilesBucketName, file.FileName, fileStream, file.ContentType, file.Length);
 
-        _logger.LogInformation($"File {uploadedFile.Id}:{uploadedFile.Name}[{uploadedFile.Size}] uploaded");
+        _logger.LogInformation($"File {id}:{file.FileName}[{file.Length}] uploaded");
 
-        return Ok(uploadedFile);
+        return RedirectToAction(nameof(File), new { id });
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> File(string? id)
+    {
+        if (id is null)
+            return NotFound();
+
+        await EnsureBucketExists(FilesBucketName);
+
+        var item = await FindObjectBy(id, FilesBucketName);
+        if (item is null)
+            return NotFound();
+
+        var itemSizeInMB = double.Round((double)item.Size / (1024 * 1024), 1);
+        var viewModel = new FileViewModel(item.ETag, item.Key, itemSizeInMB, item.LastModifiedDateTime!.Value);
+
+        return View(viewModel);
     }
 
     [HttpGet("{id}")]
@@ -59,21 +79,21 @@ public class HomeController : Controller
 
         await EnsureBucketExists(FilesBucketName);
 
-        var item = await FindObjectBy(id);
+        var item = await FindObjectBy(id, FilesBucketName);
         if (item is null)
             return NotFound();
 
         _logger.LogInformation($"Download request {item.ETag}:{item.Key}[{item.Size}]");
 
-        return await GetObjectContent(item.Key, (int)item.Size)
+        return await GetObjectContent(item.Key, (int)item.Size, FilesBucketName)
             .ConfigureAwait(false);
     }
 
-    private async Task<FileStreamResult> GetObjectContent(string objectName, int size)
+    private async Task<FileStreamResult> GetObjectContent(string objectName, int size, string bucketName)
     {
         var contentStream = new MemoryStream(size);
         var args = new GetObjectArgs()
-            .WithBucket(FilesBucketName)
+            .WithBucket(bucketName)
             .WithObject(objectName)
             .WithCallbackStream(stream =>
             {
@@ -85,18 +105,16 @@ public class HomeController : Controller
 
         return File(contentStream, response.ContentType, objectName);
     }
-    private async Task<Item?> FindObjectBy(string id)
+    private async Task<Item?> FindObjectBy(string id, string bucketName)
     {
-        var args = new ListObjectsArgs()
-            .WithBucket(FilesBucketName);
-        var items = _client.ListObjectsAsync(args);
+        var items = ListObjects(bucketName);
 
         return await items
             .Where(i => i.ETag == id)
             .SingleOrDefaultAsync();
     }
 
-    private async Task<UploadedFile> UploadObject(string bucketName, string objectName, Stream stream, string contentType, long size)
+    private async Task<string> UploadObject(string bucketName, string objectName, Stream stream, string contentType, long size)
     {
         var putObject = new PutObjectArgs()
             .WithBucket(bucketName)
@@ -106,14 +124,38 @@ public class HomeController : Controller
             .WithObjectSize(size);
 
         var response = await _client.PutObjectAsync(putObject);
+        var id = response.Etag.Trim('"');
 
-        return new UploadedFile(
-            response.Etag,
-            response.ObjectName,
-            response.Size
-        );
+        var duplicates = ListObjects(bucketName)
+            .Where(item => item.ETag == id && item.Key != objectName)
+            .Select(item => item.Key);
+
+        await RemoveObjects(bucketName, duplicates);
+
+        return id;
     }
 
+    private IObservable<Task> RemoveObjects(string bucketName, IObservable<string> objectNames)
+    {
+        return objectNames.Select(
+            objectName => RemoveObject(bucketName, objectName)
+        );
+    }
+    private Task RemoveObject(string bucketName, string objectName)
+    {
+        var args = new RemoveObjectArgs()
+            .WithBucket(bucketName)
+            .WithObject(objectName);
+
+        return _client.RemoveObjectAsync(args);
+    }
+    private IObservable<Item> ListObjects(string bucketName)
+    {
+        var args = new ListObjectsArgs()
+            .WithBucket(bucketName);
+
+        return _client.ListObjectsAsync(args);
+    }
     private async Task EnsureBucketExists(string name)
     {
         var isBucketExists = await IsBucketExists(name);

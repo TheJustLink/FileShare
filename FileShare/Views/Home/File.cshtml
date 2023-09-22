@@ -1,0 +1,17 @@
+﻿@model FileViewModel
+
+@{
+    ViewBag.Title = Model.Name;
+    Layout = "_Layout";
+}
+
+<div class="text-center">
+    <h1 class="display-4">File - @Model.Name</h1>
+    <p>Size - @Model.SizeInMB MB</p>
+    <p>Date - @Model.LastModifiedTime</p>
+    <p>Download <a asp-action="Download" asp-route-id="@Model.Id">Link</a></p>
+    
+    <form asp-action="Download" asp-route-id="@Model.Id" method="get">
+        <input type="submit" value="Download" />
+    </form>
+</div>
