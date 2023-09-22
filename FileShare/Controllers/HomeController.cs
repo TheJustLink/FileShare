@@ -39,7 +39,7 @@ public class HomeController : Controller
     public async Task<IActionResult> Upload(IFormFile? file)
     {
         if (file == null)
-            return BadRequest("No file to upload!");
+            return BadRequest("No file to upload");
 
         await using var fileStream = file.OpenReadStream();
 
