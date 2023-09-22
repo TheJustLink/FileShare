@@ -127,10 +127,11 @@ public class HomeController : Controller
         var id = response.Etag.Trim('"');
 
         var duplicates = ListObjects(bucketName)
-            .Where(item => item.ETag == id && item.Key != objectName)
-            .Select(item => item.Key);
-
-        await RemoveObjects(bucketName, duplicates);
+            .Where(item => item.ETag == id && item.Key != objectName);
+        
+        var hasDuplicates = await duplicates.Any();
+        if (hasDuplicates)
+            await RemoveObjects(bucketName, duplicates.Select(item => item.Key));
 
         return id;
     }
