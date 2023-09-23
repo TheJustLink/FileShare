@@ -46,7 +46,7 @@ services:
     build:
       context: ./FileShare
       dockerfile: ${ENVIRONMENT}.Dockerfile
-    profiles: ["Development"]
+    profiles: !reset ["Development"]
     volumes:
       - ./FileShare:/app
       - ~/.nuget/packages:/root/.nuget/packages
