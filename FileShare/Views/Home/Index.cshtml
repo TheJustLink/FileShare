@@ -1,13 +1,16 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model String?
+
+@{
+    ViewBag.Title = "Upload";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Select file to upload</h1>
-    <p>Select</p>
+    <p class="alert-warning" style="color: red">@Model</p>
 
+    <h1 class="display-4" style="color: steelblue">Select file to upload</h1>
+    
     <form asp-action="Upload" asp-controller="Home" method="post" enctype="multipart/form-data">
-        <input type="file" name="file"/><br>
-        <input type="submit" value="Upload"/>
+        <input class="btn-outline-info" type="file" name="File"/><br/>
+        <input class="btn-primary" type="submit" value="Upload"/>
     </form>
 </div>

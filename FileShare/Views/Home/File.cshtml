@@ -2,7 +2,6 @@
 
 @{
     ViewBag.Title = Model.Name;
-    Layout = "_Layout";
 }
 
 <div class="text-center">
@@ -12,6 +11,10 @@
     <p>Download <a asp-action="Download" asp-route-id="@Model.Id">Link</a></p>
     
     <form asp-action="Download" asp-route-id="@Model.Id" method="get">
-        <input type="submit" value="Download" />
+        <input class="btn-primary" type="submit" value="Download"/>
+    </form>
+    
+    <form asp-action="Index" method="get">
+        <input class="btn-close" type="submit" value="Return back" />
     </form>
 </div>

@@ -21,7 +21,7 @@ static class Program
 
         builder.Services.AddControllersWithViews();
 
-        var connectionString = builder.Configuration.GetConnectionString("Minio");
+        var connectionString = builder.Configuration.GetConnectionString("Minio")!;
         builder.Services.AddMinio(new Uri(connectionString));
 
         builder.Services.AddSwaggerGen(c =>

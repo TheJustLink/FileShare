@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 
+using FileShare.Extensions;
 using FileShare.Models;
 
 using Microsoft.AspNetCore.Http;
@@ -23,6 +23,7 @@ public class HomeController : Controller
     private readonly MinioClient _client;
 
     private const string FilesBucketName = "files";
+    private const double MaxFileSizeInMB = 25;
 
     public HomeController(ILogger<HomeController> logger, MinioClient client)
     {
@@ -32,16 +33,19 @@ public class HomeController : Controller
 
     [HttpGet]
     [Route("/")]
-    public IActionResult Index()
-    {
-        return View();
-    }
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public IActionResult Index([FromQuery] string? msg) => View(msg as object);
 
     [HttpPost]
-    public async Task<IActionResult> Upload(IFormFile? file)
+    [ProducesResponseType(StatusCodes.Status302Found)]
+    public async Task<IActionResult> Upload([FromForm] IFormFile? file)
     {
-        if (file == null)
-            return BadRequest("No file to upload");
+        if (file is null)
+            return RedirectToIndexWithMessage("No file selected");
+
+        var isOutOfSizeLimit = file.Length.GetSizeInMB() > MaxFileSizeInMB;
+        if (isOutOfSizeLimit)
+            return RedirectToIndexWithMessage("File is too big, size limit - 25 MB!");
 
         await using var fileStream = file.OpenReadStream();
 
@@ -54,7 +58,9 @@ public class HomeController : Controller
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> File(string? id)
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> File([FromRoute] string? id)
     {
         if (id is null)
             return NotFound();
@@ -65,14 +71,16 @@ public class HomeController : Controller
         if (item is null)
             return NotFound();
 
-        var itemSizeInMB = double.Round((double)item.Size / (1024 * 1024), 1);
+        var itemSizeInMB = item.Size.GetSizeInMB();
         var viewModel = new FileViewModel(item.ETag, item.Key, itemSizeInMB, item.LastModifiedDateTime!.Value);
 
         return View(viewModel);
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> Download(string? id)
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> Download([FromRoute] string? id)
     {
         if (id is null)
             return NotFound();
@@ -88,6 +96,9 @@ public class HomeController : Controller
         return await GetObjectContent(item.Key, (int)item.Size, FilesBucketName)
             .ConfigureAwait(false);
     }
+
+    private IActionResult RedirectToIndexWithMessage(string message) =>
+        RedirectToAction(nameof(Index), new { msg = message });
 
     private async Task<FileStreamResult> GetObjectContent(string objectName, int size, string bucketName)
     {
