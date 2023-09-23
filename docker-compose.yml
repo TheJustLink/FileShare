@@ -30,8 +30,7 @@ services:
       - database
     ports:
       - ${APP_PORT}:80
-    profiles:
-      - Production
+    profiles: ["Production"]
 
     environment:
       - MINIO_ROOT_USER
@@ -47,8 +46,7 @@ services:
     build:
       context: ./FileShare
       dockerfile: ${ENVIRONMENT}.Dockerfile
-    profiles:
-      - Development
+    profiles: ["Development"]
     volumes:
       - ./FileShare:/app
       - ~/.nuget/packages:/root/.nuget/packages
