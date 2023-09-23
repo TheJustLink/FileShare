@@ -5,7 +5,7 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">File - @Model.Name</h1>
+    <h1 class="display-4">@Model.Name</h1>
     <p>Size - @Model.SizeInMB MB</p>
     <p>Date - @Model.LastModifiedTime</p>
     <p>Download <a asp-action="Download" asp-route-id="@Model.Id">Link</a></p>
@@ -14,7 +14,9 @@
         <input class="btn-primary" type="submit" value="Download"/>
     </form>
     
+    <br/>
+
     <form asp-action="Index" method="get">
-        <input class="btn-close" type="submit" value="Return back" />
+        <input class="btn-outline-info" type="submit" value="Return back" />
     </form>
 </div>
