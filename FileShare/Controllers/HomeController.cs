@@ -7,6 +7,7 @@ using FileShare.Extensions;
 using FileShare.Models;
 
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -24,6 +25,7 @@ public class HomeController : Controller
 
     private const string FilesBucketName = "files";
     private const double MaxFileSizeInMB = 25;
+    private const long MaxRequestSizeInBytes = FormOptions.DefaultMultipartBodyLengthLimit;
 
     public HomeController(ILogger<HomeController> logger, MinioClient client)
     {
@@ -38,6 +40,8 @@ public class HomeController : Controller
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status302Found)]
+    [RequestSizeLimit(MaxRequestSizeInBytes)]
+    [RequestFormLimits(MultipartBodyLengthLimit = MaxRequestSizeInBytes)]
     public async Task<IActionResult> Upload([FromForm] IFormFile? file)
     {
         if (file is null)

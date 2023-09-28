@@ -9,6 +9,7 @@ WORKDIR /app
 VOLUME /app/bin
 VOLUME /app/obj
 
+
 # Entrypoint
 EXPOSE 80
 ENTRYPOINT dotnet watch -v run --urls=http://+:80
