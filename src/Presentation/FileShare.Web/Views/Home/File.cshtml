@@ -1,0 +1,22 @@
+﻿@model FileShare.Web.Models.FileViewModel
+
+@{
+    ViewBag.Title = Model.Name;
+}
+
+<div class="text-center">
+    <h1 class="display-4">@Model.Name</h1>
+    <p>Size - @double.Round(Model.SizeInMB, 2) MB</p>
+    <p>Modified - @Model.ElapsedTime.GetInStringInterpretation() ago</p>
+    <p>Download <a asp-action="Download" asp-route-id="@Model.Id">Link</a></p>
+    
+    <form asp-action="Download" asp-route-id="@Model.Id" method="get">
+        <input class="btn-primary" type="submit" value="Download"/>
+    </form>
+    
+    <br/>
+
+    <form asp-action="Index" method="get">
+        <input class="btn-outline-info" type="submit" value="Return back" />
+    </form>
+</div>
