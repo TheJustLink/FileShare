@@ -2,52 +2,46 @@
 
 using FileShare.Persistence.Minio.Configuration;
 
+using Microsoft.Extensions.Options;
+
 using Minio;
 using Minio.DataModel;
 
 namespace FileShare.Persistence.Minio;
 
-public class BucketContext
+public sealed class BucketContext
 {
     private readonly IMinioClient _client;
     private readonly string _bucketName;
 
-    public BucketContext(MinioClient client, Settings settings)
+    public BucketContext(IMinioClient client, IOptions<Settings> settings)
     {
         _client = client;
-        _bucketName = settings.FilesBucket;
+        _bucketName = settings.Value.FilesBucket;
     }
 
     public async Task EnsureBucketExistsAsync()
     {
-        var isExists = await IsBucketExistsAsync(_bucketName).ConfigureAwait(false);
+        var isExists = await IsBucketExistsAsync(_bucketName);
         if (isExists) return;
 
-        await MakeBucketAsync(_bucketName).ConfigureAwait(false);
+        await MakeBucketAsync(_bucketName);
     }
 
-    public async Task<Item?> FindObjectAsync(string etag)
-    {
-        var items = ListObjects();
-
-        return await items
-            .Where(i => i.ETag == etag)
-            .SingleOrDefaultAsync();
-    }
-    public Task<ObjectStat?> GetObjectContentAsync(string objectName, Stream contentBuffer)
+    public Task<ObjectStat> GetObjectContentAsync(string objectName, Stream contentBuffer)
     {
         var args = new GetObjectArgs()
             .WithBucket(_bucketName)
             .WithObject(objectName)
-            .WithCallbackStream(stream =>
+            .WithCallbackStream(async (stream, cancellationToken) =>
             {
-                stream.CopyTo(contentBuffer);
+                await stream.CopyToAsync(contentBuffer, cancellationToken);
                 contentBuffer.Position = 0;
             });
 
         return _client.GetObjectAsync(args);
     }
-    public Task<PutObjectResponse?> UploadObjectAsync(string objectName, Stream content, string contentType, long size)
+    public Task<PutObjectResponse> UploadObjectAsync(string objectName, Stream content, string contentType, long size)
     {
         var putObject = new PutObjectArgs()
             .WithBucket(_bucketName)
@@ -78,7 +72,6 @@ public class BucketContext
 
         return _client.RemoveObjectAsync(args);
     }
-
 
     private Task<bool> IsBucketExistsAsync(string name)
     {

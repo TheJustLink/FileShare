@@ -1,4 +1,6 @@
-﻿using FileShare.Domain.Aggregates;
+﻿using System.Reactive.Linq;
+
+using FileShare.Domain.Aggregates;
 using FileShare.Domain.ValueObjects;
 
 using FileShare.Application.Repositories;
@@ -11,12 +13,21 @@ public class FileMetadataRepository : IFileMetadataRepository
 
     public FileMetadataRepository(BucketContext context) => _context = context;
 
-    public async Task<FileMetadata?> GetAsync(Identity identity)
+    public async Task<bool> ExistsAsync(Identity identity)
     {
         var etag = identity.Key;
 
-        var item = await _context.FindObjectAsync(etag);
-        if (item is null) return null;
+        var exists = await _context.ListObjects()
+            .Where(i => i.ETag == etag).Any();
+
+        return exists;
+    }
+    public async Task<FileMetadata> GetAsync(Identity identity)
+    {
+        var etag = identity.Key;
+        
+        var item = await _context.ListObjects()
+            .Where(i => i.ETag == etag).FirstAsync();
 
         var name = item.Key;
         var size = new Size((long)item.Size);

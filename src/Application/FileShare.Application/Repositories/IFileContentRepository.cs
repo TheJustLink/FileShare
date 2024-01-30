@@ -5,6 +5,6 @@ namespace FileShare.Application.Repositories;
 
 public interface IFileContentRepository
 {
-    Task<Identity?> UploadAsync(FileContent content);
-    Task<FileContent?> DownloadAsync(Identity identity);
+    Task<Identity> UploadAsync(FileContent content);
+    Task<FileContent> DownloadAsync(Identity identity);
 }

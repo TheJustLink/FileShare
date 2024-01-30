@@ -5,5 +5,6 @@ namespace FileShare.Application.Repositories;
 
 public interface IFileMetadataRepository
 {
-    Task<FileMetadata?> GetAsync(Identity identity);
+    Task<bool> ExistsAsync(Identity identity);
+    Task<FileMetadata> GetAsync(Identity identity);
 }

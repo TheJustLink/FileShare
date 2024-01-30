@@ -1,9 +1,7 @@
-﻿using System.Net.Mime;
-
-using FileShare.Application.Services;
+﻿using FileShare.Application.Services;
 using FileShare.Domain.Aggregates;
 using FileShare.Domain.ValueObjects;
-using FileShare.Web.Models;
+using FileShare.Web.Extensions;
 
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +15,6 @@ public class HomeController : Controller
     private readonly ILogger<HomeController> _logger;
     private readonly IFileService _fileService;
 
-    private const double MaxFileSizeInMB = 25;
     private const long MaxRequestSizeInBytes = FormOptions.DefaultMultipartBodyLengthLimit;
 
     public HomeController(ILogger<HomeController> logger, IFileService fileService)
@@ -40,27 +37,18 @@ public class HomeController : Controller
         if (file is null)
             return RedirectToIndexWithMessage("No file selected");
 
-        var size = new Size(file.Length);
-
-        var isOutOfSizeLimit = size.SizeInMB > MaxFileSizeInMB;
-        if (isOutOfSizeLimit)
-            return RedirectToIndexWithMessage("File is too big, size limit - 25 MB!");
-
-        var metadata = new FileMetadata(file.FileName, new Size(file.Length));
-        var contentType = new ContentType(file.ContentType);
-
         await using var fileStream = file.OpenReadStream();
-        var content = new FileContent(metadata, contentType, fileStream);
+        var fileContent = file.MapToFileContent(fileStream);
 
-        var response = await _fileService.UploadAsync(content);
+        var response = await _fileService.UploadAsync(fileContent);
         if (response.IsFailure)
             return RedirectToIndexWithMessage(response.Message);
 
-        var id = response.Value.Key;
+        var fileId = response.Value.Key;
 
-        _logger.LogInformation($"File {id}:{file.FileName}[{file.Length}] uploaded");
+        _logger.LogInformation("File {Id}:{Name}[{Size}] uploaded", fileId, file.FileName, fileContent.Metadata.Size.SizeInMB);
 
-        return RedirectToAction(nameof(File), new { id });
+        return RedirectToAction(nameof(File), new { id = fileId });
     }
 
     [HttpGet("{id}")]
@@ -68,20 +56,13 @@ public class HomeController : Controller
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> File([FromRoute] string? id)
     {
-        if (id is null)
-            return NotFound();
+        if (id is null) return NotFound();
 
         var response = await _fileService.GetMetadataAsync(new Identity(id));
-        if (response.IsFailure)
-            return NotFound();
+        if (response.IsFailure) return NotFound();
 
-        var metadata = response.Value;
-        var viewModel = new FileViewModel(
-            id,
-            metadata.Name,
-            metadata.Size.SizeInMB,
-            metadata.ModificationTime.ElapsedTime
-        );
+        var fileMetadata = response.Value;
+        var viewModel = fileMetadata.MapToViewModel(id);
 
         return View(viewModel);
     }
@@ -94,23 +75,23 @@ public class HomeController : Controller
         if (id is null) return NotFound();
 
         var response = await _fileService.DownloadAsync(new Identity(id));
-        if (response.IsFailure)
-            return NotFound();
+        if (response.IsFailure) return NotFound();
 
-        var content = response.Value;
+        var fileContent = response.Value;
 
-        return File(
-            content.Stream,
-            content.Type.ToString(),
-            content.Metadata.Name,
-            false
-        );
+        return File(fileContent);
     }
 
-    private IActionResult RedirectToIndexWithMessage(string? message)
-    {
-        return string.IsNullOrWhiteSpace(message)
+    private FileStreamResult File(FileContent content) => File
+    (
+        content.Stream,
+        content.Type.ToString(),
+        content.Metadata.Name,
+        true
+    );
+
+    private IActionResult RedirectToIndexWithMessage(string? message) =>
+        string.IsNullOrWhiteSpace(message)
             ? RedirectToAction(nameof(Index))
             : RedirectToAction(nameof(Index), new { msg = message });
-    }
 }

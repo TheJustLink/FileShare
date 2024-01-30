@@ -1,4 +1,4 @@
-﻿namespace FileShare.Web.Extensions;
+﻿namespace FileShare.Web.Configuration;
 
 static class ServiceRegistration
 {

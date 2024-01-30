@@ -17,7 +17,7 @@ public class FileContentRepository : IFileContentRepository
         _metadataRepository = metadataRepository;
     }
 
-    public async Task<Identity?> UploadAsync(FileContent content)
+    public async Task<Identity> UploadAsync(FileContent content)
     {
         var metadata = content.Metadata;
         var putObjectResponse = await _context.UploadObjectAsync(
@@ -25,45 +25,40 @@ public class FileContentRepository : IFileContentRepository
             content.Stream,
             content.Type.ToString(),
             metadata.Size.SizeInBytes
-        ).ConfigureAwait(false);
-
-        if (putObjectResponse is null) return null;
+        );
 
         var etag = putObjectResponse.Etag!.Trim('"');
 
-        await RemoveDuplicatesAsync(metadata.Name, etag)
-            .ConfigureAwait(false);
+        // Minio doesn't remove duplicates when uploading files with the same etag,
+        // so we need to remove them manually, technically it's the same file, we can't check it in advance
+
+        await RemoveDuplicatesAsync(metadata.Name, etag);
 
         return new Identity(etag);
     }
-    public async Task<FileContent?> DownloadAsync(Identity identity)
+    public async Task<FileContent> DownloadAsync(Identity identity)
     {
-        var metadataResponse = await _metadataRepository.GetAsync(identity).ConfigureAwait(false);
-        if (metadataResponse.HasValue == false) return null;
-
-        var metadata = metadataResponse.Value;
+        var metadata = await _metadataRepository.GetAsync(identity);
         var name = metadata.Name;
-        
+
         var size = (int)metadata.Size.SizeInBytes;
         var buffer = new MemoryStream(size);
 
-        var objectStat = await _context.GetObjectContentAsync(name, buffer).ConfigureAwait(false);
-        if (objectStat is null) return null;
-
+        var objectStat = await _context.GetObjectContentAsync(name, buffer);
         var contentType = new ContentType(objectStat.ContentType);
 
         return new FileContent(metadata, contentType, buffer);
     }
 
-    private async Task RemoveDuplicatesAsync(string objectName, string etag)
+    private async ValueTask RemoveDuplicatesAsync(string objectName, string etag)
     {
         var duplicatesRequest = _context.ListObjects()
-            .Where(item => item.ETag == etag && item.Key != objectName);
+            .Where(item => item.ETag == etag && item.Key != objectName)
+            .Select(static item => item.Key);
 
         var hasDuplicates = await duplicatesRequest.Any();
         if (hasDuplicates == false) return;
 
-        var duplicates = duplicatesRequest.Select(item => item.Key);
-        await _context.RemoveObjects(duplicates);
+        await _context.RemoveObjects(duplicatesRequest);
     }
 }
