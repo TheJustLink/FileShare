@@ -9,8 +9,5 @@
 
     <h1 class="display-4" style="color: steelblue">Select file to upload</h1>
     
-    <form asp-action="Upload" asp-controller="Home" method="post" enctype="multipart/form-data">
-        <input class="btn-outline-info" type="file" name="File" /><br/>
-        <input class="btn-primary" type="submit" value="Upload"/>
-    </form>
+    <form class="dropzone" asp-action="Upload" asp-controller="Home" method="post" enctype="multipart/form-data" id="FileUpload"></form>
 </div>
