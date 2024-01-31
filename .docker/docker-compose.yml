@@ -5,7 +5,8 @@ volumes:
 
 services:
   database:
-    image: quay.io/minio/minio
+    image: minio/minio:RELEASE.2024-01-18T22-51-28Z.fips
+    #image: quay.io/minio/minio
     restart: always
     volumes:
       - minio-data:/data
