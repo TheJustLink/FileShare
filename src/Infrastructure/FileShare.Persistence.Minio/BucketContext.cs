@@ -6,6 +6,8 @@ using Microsoft.Extensions.Options;
 
 using Minio;
 using Minio.DataModel;
+using Minio.DataModel.Args;
+using Minio.DataModel.Response;
 
 namespace FileShare.Persistence.Minio;
 

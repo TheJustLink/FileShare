@@ -37,8 +37,7 @@ public class HomeController : Controller
         if (file is null)
             return RedirectToIndexWithMessage("No file selected");
 
-        await using var fileStream = file.OpenReadStream();
-        var fileContent = file.MapToFileContent(fileStream);
+        var fileContent = file.MapToFileContent();
 
         var response = await _fileService.UploadAsync(fileContent);
         if (response.IsFailure)
@@ -84,7 +83,7 @@ public class HomeController : Controller
 
     private FileStreamResult File(FileContent content) => File
     (
-        content.Stream,
+        content.StreamHolder(),
         content.Type.ToString(),
         content.Metadata.Name,
         true

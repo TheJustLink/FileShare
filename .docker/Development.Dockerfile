@@ -1,5 +1,5 @@
 # SDK image for building
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS dev-env
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS dev-env
 ENV LC_ALL=en_US.UTF-8
 ENV LANG=en_US.UTF-8
 

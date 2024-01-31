@@ -18,7 +18,6 @@ public static class DependencyInjection
 
         var settings = settingsConfig.Get<Settings>()!;
         services.AddMinio(new Uri(settings.Uri));
-        services.AddSingleton<IMinioClient>(static sp => sp.GetRequiredService<MinioClient>());
 
         services.AddSingleton<BucketContext>();
         services.AddSingleton<IFileMetadataRepository, FileMetadataRepository>();

@@ -6,5 +6,5 @@ public readonly record struct FileContent
 (
     FileMetadata Metadata,
     ContentType Type,
-    Stream Stream
+    Func<Stream> StreamHolder
 );

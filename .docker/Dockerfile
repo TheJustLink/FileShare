@@ -7,7 +7,7 @@ ARG ProjectImage="$ProjectName.dll"
 
 # Prepare projects restore
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS prepare-restore
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS prepare-restore
 ENV PATH="${PATH}:/root/.dotnet/tools"
 RUN dotnet tool install --global --no-cache dotnet-subset
 
@@ -17,7 +17,7 @@ ARG ProjectPath
 RUN dotnet subset restore $ProjectPath --root-directory . --output restore_subset/
 
 # SDK image for building
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS publish
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS publish
 ENV LC_ALL=en_US.UTF-8
 ENV LANG=en_US.UTF-8
 WORKDIR /app/src
@@ -34,7 +34,7 @@ WORKDIR $ProjectDirectory
 RUN dotnet publish -c Release -o /app/publish /p:UseAppHost=false --no-restore
 
 # Base runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 as final
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 as final
 
 # Move compiled app to base runtime image
 WORKDIR /app

@@ -22,7 +22,7 @@ public class FileContentRepository : IFileContentRepository
         var metadata = content.Metadata;
         var putObjectResponse = await _context.UploadObjectAsync(
             metadata.Name,
-            content.Stream,
+            content.StreamHolder(),
             content.Type.ToString(),
             metadata.Size.SizeInBytes
         );
@@ -47,7 +47,7 @@ public class FileContentRepository : IFileContentRepository
         var objectStat = await _context.GetObjectContentAsync(name, buffer);
         var contentType = new ContentType(objectStat.ContentType);
 
-        return new FileContent(metadata, contentType, buffer);
+        return new FileContent(metadata, contentType, () => buffer);
     }
 
     private async ValueTask RemoveDuplicatesAsync(string objectName, string etag)
