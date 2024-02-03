@@ -6,8 +6,9 @@
 Dropzone.options.FileUpload = {
     paramName: "File",
     maxFilesize: 25, // MB
+    dictDefaultMessage: "Drop file here",
 
     success: function (file) {
-        window.location.href = file.xhr.responseURL;
+        //window.location.href = file.xhr.responseURL;
     }
 };

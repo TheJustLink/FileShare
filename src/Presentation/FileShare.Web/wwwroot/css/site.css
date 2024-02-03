@@ -4,12 +4,13 @@
 
 :root {
   --black-color: #323232;
-  --gray-color: #494949;
-  --banana-color: #F5F2D7;
+  --gray-color: #2d2d2d;
+  --banana-color: #8474b9;
   --border-width: 1px;
   --border-radius: 25px;
   --font-title-size: 50px;
-  --font-side-size: 15px;
+  --font-middle-size: 35px;
+  --font-side-size: 18px;
 
   background-color: var(--black-color);
 }
@@ -23,6 +24,16 @@ body {
 html {
   height: 100%;
   margin: 0;
+}
+
+.content {
+    min-height: 100%;
+    margin: 0 auto -60px 0;
+}
+
+.container-fluid {
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .background-black {
@@ -63,8 +74,6 @@ html {
 
 .outer-section {
   background-color: var(--black-color);
-  min-height: 100%;
-  margin: 0 auto -60px 0;
 }
 
 .image-preview {
@@ -82,12 +91,19 @@ html {
   font-family: "Montserrat", sans-serif;
 }
 
-.inline-block {
-  display: inline-block;
+.text-middle {
+  font-size: var(--font-middle-size);
+  font-family: "Montserrat", sans-serif;
 }
 
 .side-text {
   font-size: var(--font-side-size);
+  font-family: "Montserrat", sans-serif;
+}
+
+
+.inline-block {
+  display: inline-block;
 }
 
 .image-title {
@@ -120,12 +136,12 @@ html {
 .drop-field {
   margin-top: 30px;
 
-  height: 100px;
+  height: 600px;
   border-color: var(--banana-color);
 
   border-width: var(--border-width);
   border-radius: var(--border-radius);
-  border-style: dashed;
+  border-style: none;
 }
 
 .display-field {
@@ -147,4 +163,11 @@ html {
 
 .footer {
   height: 60px;
+}
+
+.dz-button {
+    background-color: var(--black-color);
+    color: var(--banana-color);
+    border: none;
+    border-radius: var(--border-radius);
 }

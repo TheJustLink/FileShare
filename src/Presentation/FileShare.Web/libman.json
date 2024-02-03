@@ -5,6 +5,10 @@
     {
       "library": "dropzone@5.9.3",
       "destination": "wwwroot/lib/dropzone/"
+    },
+    {
+      "library": "normalize@8.0.1",
+      "destination": "wwwroot/lib/normalize/"
     }
   ]
 }
