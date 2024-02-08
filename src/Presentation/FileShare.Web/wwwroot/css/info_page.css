@@ -1,0 +1,77 @@
+:root {
+    --font-middle-size: 25px;
+    --font-middle-title-size: 35px;
+}
+
+.row{
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.outer-section {
+    padding: 20vh 25vw 25vh 25vw;
+}
+
+.bordered-box {
+    border-width: var(--border-width);
+    border-color: var(--text-color);
+    border-style: solid;
+}
+
+.button-box {
+    border-width: var(--border-width);
+    border-color: var(--text-color);
+    border-style: solid;
+}
+
+.height-main {
+    height: 120px;
+}
+
+.height-main-middle {
+    height: 90px;
+}
+
+.height-main-half {
+    height: 60px;
+}
+
+.rounded-box {
+    border-radius: var(--border-radius);
+    margin-bottom: 15px;
+    padding: 0;
+}
+
+.text-middle-title {
+    font-size: var(--font-middle-title-size);
+}
+
+.text-middle {
+    font-size: var(--font-middle-size);
+}
+
+.left-bordered-box {
+    border-width: var(--border-width);
+    border-bottom-left-radius: var(--border-radius);
+    border-top-left-radius: var(--border-radius);
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+    border-style: solid dashed solid solid;
+}
+
+.right-bordered-box {
+    border-width: var(--border-width);
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+    border-bottom-right-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
+    border-style: solid solid solid dashed;
+}
+
+.mb-6 {
+    margin-bottom: 6rem !important
+}
+
+.mb-7 {
+    margin-bottom: 12rem !important
+}

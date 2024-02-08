@@ -4,6 +4,8 @@
     ViewBag.Title = "Upload";
 }
 
+<link rel="stylesheet" href="~/css/upload_page.css" />
+
 <div class="outer-section">
     <div class="section">
         <div class="container-fluid">
@@ -12,12 +14,11 @@
             <div class="row">
 
 
-                <form class="col-12 drop-field background-gray align-vertical-center align-horizontal-center dropzone" asp-action="Upload" asp-controller="Home" method="post" enctype="multipart/form-data" id="FileUpload">
-                    <div class="col-lg-offset-3 text-center text-title color-banana align-vertical-center">
+                <div class="col-12 drop-field background-gray align-vertical-center align-horizontal-center">
+                    <form class="col-lg-offset-3 text-center text-title color-banana align-vertical-center dropzone" asp-action="Upload" asp-controller="Home" method="post" enctype="multipart/form-data" id="FileUpload">
                         <img src="file_folder_5kvkdmk8q7rj.svg" alt="Document icon" id="Document-icon">
-                        <p class="Centered">Drop File Here</p>
-                    </div>
-                </form>
+                    </form>
+                </div>
 
 
             </div>

@@ -1,0 +1,33 @@
+.outer-section {
+    padding-top: var(--font-title-size);
+    background-color: var(--main-color);
+}
+
+.section {
+    padding: 0 10% 0 10%;
+    background-color: var(--main-color)
+}
+
+
+.drop-field {
+    height: max(calc(100vh - 250px),100px);
+    margin-bottom: 90px;
+    border-color: var(--text-color);
+    border-radius: var(--border-radius);
+    border-width: var(--border-width);
+    border-style: dashed;
+    padding: 0;
+}
+
+.dz-button{
+    background-color: var(--side-color);
+    border: none;
+    color: var(--text-color);
+    height: 100%;
+    width: 100%;
+    border-radius: var(--border-radius);
+}
+.dz-message{
+    height: 100%;
+    width: 100%;
+}
