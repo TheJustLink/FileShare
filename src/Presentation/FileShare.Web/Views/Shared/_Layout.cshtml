@@ -6,25 +6,25 @@
 
     <title>@ViewBag.Title - FileShare</title>
 
+    <link rel="stylesheet" href="~/lib/normalize/normalize.min.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/lib/dropzone/min/dropzone.min.css" />
-    <link rel="stylesheet" href="~/css/base-configuration.css" asp-append-version="true" />
-
+    <link rel="stylesheet" href="~/lib/dropzone/min/basic.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
     <header>
             
     </header>
 
-    <div class="container">
-        <main role="main" class="pb-3">
+    <div class="container-fluid content">
+        <main role="main">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - FileShare
+    <footer class="background-black footer">
+        <div class="col-12 background-gray footer color-banana align-vertical-center side-text">
+            <p class="Centered">© 2023 - FileShare</p>
         </div>
     </footer>
 

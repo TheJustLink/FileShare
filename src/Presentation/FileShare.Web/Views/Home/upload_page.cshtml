@@ -4,61 +4,22 @@
     ViewBag.Title = "Upload";
 }
 
-<link rel="stylesheet" href="~/css/upload_page.css" />
+<div class="text-center">
+    <p class="alert-warning" style="color: red">@Model</p>
+</div>
 
 <div class="outer-section">
     <div class="section">
-        <div class="container-fluid">
-
-
-            <div class="row">
-
-
-                <div class="col-12 drop-field background-gray align-vertical-center align-horizontal-center">
-                    <form class="col-lg-offset-3 text-center text-title color-banana align-vertical-center dropzone" asp-action="Upload" asp-controller="Home" method="post" enctype="multipart/form-data" id="FileUpload">
-                        <img src="file_folder_5kvkdmk8q7rj.svg" alt="Document icon" id="Document-icon">
-                    </form>
-                </div>
-
-
-            </div>
-
-
-            <div class="row">
-
-
-                <div class="col-12 display-field background-gray">
-                    <div class="row">
-                        <div class="col-12 text-title text-center color-banana">
-                            <div class="offset-1 col-10 image-title background-black">
-                                <p>Title</p>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="offset-1 col-10 image-place-holder background-black text-center align-vertical-center overflow-hidden">
-                                <img src="4d758652-e0ea-418d-9fe3-2b4dc26f09f9.jpg" alt="" class="image-preview">
-                            </div>
-                        </div>
-                    </div>
-
-
-                </div>
+        <div class="row">
+            <div class="text-center text-title color-banana align-vertical-center">
+                <p class="Centered">File Share</p>
             </div>
         </div>
 
-
-
+        <div class="row color-banana text-title">
+            <form class="text-middle drop-field background-gray align-vertical-center align-horizontal-center dropzone"
+                  asp-action="Upload" asp-controller="Home" method="post" enctype="multipart/form-data" id="FileUpload">
+            </form>
+        </div>
     </div>
 </div>
-
-<footer class="background-black footer">
-    <div class="col-12 background-gray footer color-banana align-vertical-center side-text">
-        <p class="Centered">© 2023 - FileShare</p>
-    </div>
-</footer>
-
-
