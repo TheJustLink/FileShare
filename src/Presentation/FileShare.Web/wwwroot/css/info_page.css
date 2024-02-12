@@ -57,6 +57,7 @@
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;
     border-style: solid dashed solid solid;
+    border-color: var(--main-color);
 }
 
 .right-bordered-box {
@@ -66,6 +67,7 @@
     border-bottom-right-radius: var(--border-radius);
     border-top-right-radius: var(--border-radius);
     border-style: solid solid solid dashed;
+    border-color: var(--main-color);
 }
 
 .mb-6 {
@@ -74,4 +76,20 @@
 
 .mb-7 {
     margin-bottom: 12rem !important
+}
+
+.info-text-field {
+    color: var(--text-color);
+    font-size: var(--font-title-size);
+    font-family: var(--font-family);
+    position: relative;
+    white-space: normal;
+    text-overflow: ellipsis;
+    max-width: 90%;
+    max-height: 90%;
+    overflow: hidden;
+    line-height: 100%;
+    display: inline-block;
+    font-size: 4vw;
+    text-align: center;
 }

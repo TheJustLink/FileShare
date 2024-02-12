@@ -2,6 +2,7 @@ version: '3.9'
 
 volumes:
   minio-data: {}
+  asp-net: {}
 
 services:
   database:
@@ -27,6 +28,8 @@ services:
       context: ../src
       dockerfile: ../.docker/Dockerfile
     restart: always
+    volumes:
+      - asp-net:/root/.aspnet
     depends_on:
       - database
     ports:
@@ -52,7 +55,8 @@ services:
     profiles:
       - Development
     volumes:
-      - ../src:/app
+      - asp-net:/root/.aspnet
+      - ../src:/app 
       - ~/.nuget/packages:/root/.nuget/packages
       # Create anonymous volumes to avoid conflicts
       - /app/Domain/FileShare.Domain/bin

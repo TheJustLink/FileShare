@@ -1,3 +1,9 @@
+:root {
+    --upload-popup-width: 420px;
+    --upload-popup-height: 256px;
+    --progress-bar-width: 370px;
+    --progress-bar-height: 32px;
+}
 .outer-section {
     padding-top: var(--font-title-size);
     background-color: var(--main-color);
@@ -15,19 +21,66 @@
     border-color: var(--text-color);
     border-radius: var(--border-radius);
     border-width: var(--border-width);
-    border-style: dashed;
+    border-style: none;
     padding: 0;
+    background-color: var(--side-color);
+    color: var(--text-color);
 }
 
-.dz-button{
+/*.dz-button{
     background-color: var(--side-color);
     border: none;
     color: var(--text-color);
     height: 100%;
     width: 100%;
     border-radius: var(--border-radius);
-}
-.dz-message{
+}*/
+/*.dz-message{
     height: 100%;
     width: 100%;
+}*/
+
+.dropzone .dz-preview.dz-file-preview .dz-image {
+    border-radius: var(--border-radius);
+    background-color: var(--main-color);
+    background-image: none;
+    width: var(--upload-popup-width);
+    height: var(--upload-popup-height);
+}
+.dropzone .dz-preview .dz-details .dz-size {
+    background: none;
+    color: var(--text-color);
+    font-size: var(--font-middle-size);
+    font-family: var(--font-family);
+    line-height: 150%;
+}
+.dropzone .dz-preview .dz-details .dz-filename {
+    color: var(--text-color);
+    font-size: var(--font-middle-size);
+    font-family: var(--font-family);
+    line-height: 150%;
+}
+.dropzone .dz-preview .dz-details .dz-filename span, .dropzone .dz-preview .dz-details .dz-size span {
+    background: none;
+}
+
+.dropzone .dz-preview .dz-progress {
+    height: var(--progress-bar-height);
+    width: var(--progress-bar-width);
+    left: calc(60% - var(--progress-bar-width)/2);
+    top: 75%;
+    border-radius: var(--border-radius);
+    background-color: var(--side-color);
+}
+.dropzone .dz-preview .dz-progress .dz-upload {
+    background: none;
+    background-color: var(--text-color);
+}
+.dropzone .dz-preview .dz-details .dz-filename:hover span {
+    background-color: var(--side-color);
+    border: none;
+    border-radius: var(--border-radius);
+}
+.dropzone.dz-drag-hover {
+    border-style: dashed;
 }

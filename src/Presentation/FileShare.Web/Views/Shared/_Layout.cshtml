@@ -6,10 +6,12 @@
 
     <title>@ViewBag.Title - FileShare</title>
 
-    <link rel="stylesheet" href="~/lib/normalize/normalize.min.css" />
+    @*<link rel="stylesheet" href="~/lib/normalize/normalize.min.css" />*@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/lib/dropzone/min/basic.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/base-configuration.css" asp-append-version="true" />
+
+    @await RenderSectionAsync("Styles", required: false)
+
 </head>
 <body>
     <header>
@@ -22,10 +24,8 @@
         </main>
     </div>
 
-    <footer class="background-black footer">
-        <div class="col-12 background-gray footer color-banana align-vertical-center side-text">
-            <p class="Centered">© 2023 - FileShare</p>
-        </div>
+    <footer class="footer align-vertical-center text-side background-side">
+        <p class="Centered">© 2024 - FileShare</p>
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

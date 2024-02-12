@@ -4,19 +4,58 @@
     ViewBag.Title = Model.Name;
 }
 
-<div class="text-center">
-    <h1 class="display-4">@Model.Name</h1>
-    <p>Size - @double.Round(Model.SizeInMB, 2) MB</p>
-    <p>Modified - @Model.ElapsedTime.GetInStringInterpretation() ago</p>
-    <p>Download <a asp-action="Download" asp-route-id="@Model.Id">Link</a></p>
-    
-    <form asp-action="Download" asp-route-id="@Model.Id" method="get">
-        <input class="btn-primary" type="submit" value="Download"/>
-    </form>
-    
-    <br/>
+@section Styles {
+    <link rel="stylesheet" href="~/css/info_page.css" asp-append-version="true" />
+}
 
-    <form asp-action="Index" method="get">
-        <input class="btn-outline-info" type="submit" value="Return back" />
-    </form>
+<div class="outer-section">
+    <div class="section">
+        <div class="row">
+            <div class="rounded-box height-main align-horizontal-center align-vertical-center background-side">
+                <p class="color-text text-title">@Model.Name</p>
+            </div>
+        </div>
+        <div class="row rounded-box height-main-half">
+            <div class="col-4 px-0">
+                <div class="rounded-box height-main-half border-main align-horizontal-center left-bordered-box align-horizontal-center align-vertical-center background-side">
+                    <p class="color-text text-middle">@double.Round(Model.SizeInMB, 1) MB</p>
+                </div>
+            </div>
+            <div class="col-8 px-0">
+                <div class="rounded-box height-main-half border-main align-horizontal-center right-bordered-box align-vertical-center background-side">
+                    <p class="color-text text-middle">@Model.ElapsedTime.GetInStringInterpretation() ago</p>
+                </div>
+            </div>
+        </div>
+        <div class="row rounded-box height-main-half mb-6">
+            <div class="col-6 px-0">
+                <button type="button" class="color-text-inverted border-text text-middle left-bordered-box button-box align-horizontal-center align-vertical-center"
+                    onclick="copyTextToClipboard(document.URL)">
+                    Copy link
+                </button>
+            </div>
+            <div class="col-6 px-0">
+                <button type="button" class="color-text-inverted border-text text-middle right-bordered-box button-box align-horizontal-center align-vertical-center"
+                    onclick="copyTextToClipboard(window.location.origin + '@Url.Action("Download", "Home", new { Model.Id })')">
+                    Copy direct link
+                </button>
+            </div>
+        </div>
+        <div class="row rounded-box height-main-middle">
+            <div class="col-3 px-0">
+                <form asp-action="Index" method="get">
+                    <button type="submit" class="color-text-inverted border-text text-middle-title left-bordered-box align-horizontal-center align-vertical-center">
+                        Upload
+                    </button>
+                </form>
+            </div>
+            <div class="col-9 px-0">
+                <form asp-action="Download" asp-route-id="@Model.Id" method="get">
+                    <button type="submit" class="color-text-inverted border-text text-middle-title right-bordered-box align-horizontal-center align-vertical-center">
+                        Download
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>

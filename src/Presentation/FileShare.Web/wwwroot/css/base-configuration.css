@@ -1,19 +1,18 @@
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+
+
 :root {
     --main-color: #323232;
     --side-color: #2d2d2d;
     --text-color: #8474b9;
-    --hover-color: #db87ec;
+    --hover-color: #a28fdf;
+    --alert-color: red;
     --border-width: 2px;
     --border-radius: 25px;
     --font-title-size: 50px;
+    --font-middle-size: 30px;
     --font-side-size: 18px;
-}
-
-button:hover, button:target, button:focus, button q:focus-visible{
-    border-style: solid;
-    border-width: var(--border-width);
-    border-color: var(--hover-color);
-    outline-color: var(--hover-color);
+    --font-family: "Montserrat", sans-serif;
 }
 
 body {
@@ -51,6 +50,7 @@ p{
 
 .background-text {
     background-color: var(--text-color);
+    font-family: var(--font-family);
 }
 
 .color-main {
@@ -63,6 +63,11 @@ p{
 
 .color-text {
     color: var(--text-color);
+    font-family: var(--font-family);
+}
+.color-text-inverted {
+    color: var(--side-color);
+    font-family: var(--font-family);
 }
 
 .border-main {
@@ -74,17 +79,19 @@ p{
 }
 
 .border-text {
-    border-color: var(--text-color);
+    font-family: var(--font-family);
 }
 
 .text-title {
+    color: var(--text-color);
     font-size: var(--font-title-size);
-    font-family: "Montserrat", sans-serif;
+    font-family: var(--font-family);
 }
 
 .text-side {
+    color: var(--text-color);
     font-size: var(--font-side-size);
-    font-family: "Montserrat", sans-serif;
+    font-family: var(--font-family);
 }
 
 .Centered {
@@ -105,14 +112,35 @@ p{
 .footer {
     height: 60px;
 }
+.alert {
+    height: 60px;
+    background-color: var(--side-color);
+    color: var(--alert-color);
+    font-size: var(--font-side-size);
+    font-family: var(--font-family);
+}
 
-button{
+button {
     height: 100%;
     width: 100%;
     border-radius: var(--border-radius);
-    border-style: none;
-    background-color: var(--side-color);
+    background-color: var(--text-color);
     padding: 0;
+    transition: all 0.08s ease;
+}
+button:hover {
+    transform: scale(1.05) rotate(-2deg);
+    background-color: var(--hover-color);
+    color: var(--side-color);
+}
+button:active {
+    transform: scale(0.8) rotate(5deg);
+    color: var(--main-color);
+    border-color: var(--hover-color);
+    border-radius: calc(var(--border-radius) * 2);
 }
 
-
+form {
+    height: 100%;
+    width: 100%;
+}

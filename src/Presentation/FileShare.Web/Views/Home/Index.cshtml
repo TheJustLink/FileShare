@@ -1,0 +1,32 @@
+﻿@model String?
+
+@{
+    ViewBag.Title = "Upload";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/lib/dropzone/min/dropzone.min.css" />
+    <link rel="stylesheet" href="~/css/upload_page.css" asp-append-version="true" />
+}
+
+@if (Model is not null) {
+    <div class="text-center">
+        <p class="alert">@Model</p>
+    </div>
+}
+
+<div class="outer-section">
+    <div class="section">
+        <div class="row">
+            <div class="text-center text-title align-vertical-center">
+                <p class="Centered">File Share</p>
+            </div>
+        </div>
+
+        <div class="row text-title">
+            <form class="text-middle drop-field align-vertical-center align-horizontal-center dropzone"
+                  asp-action="Upload" asp-controller="Home" method="post" enctype="multipart/form-data" id="FileUpload">
+            </form>
+        </div>
+    </div>
+</div>
